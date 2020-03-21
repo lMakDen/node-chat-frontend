@@ -1,0 +1,10 @@
+.chat-input {
+  margin: 20px;
+  &__actions-upload-btn {
+    cursor: pointer;
+  }
+  &__emoji-picker{
+    position: absolute;
+    bottom: 50px;
+  }
+}

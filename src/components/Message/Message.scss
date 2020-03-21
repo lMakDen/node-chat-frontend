@@ -1,0 +1,185 @@
+@import "../../styles/variables";
+.message {
+  $self: &;
+  &__content {
+    display: flex;
+    max-width: 440px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  &__avatar {
+    display: flex;
+    flex-direction: column-reverse;
+    .avatar, img {
+      border-radius: 50px;
+      width: 33px;
+      height: 33px;
+      margin-right: 13px;
+      margin-bottom: 5px;
+    }
+  }
+
+  &__bubble {
+    background: $blue;
+    box-shadow: 0 5px 5px rgba(54, 116, 255, 0.196733);
+    border-radius: 12px 12px 12px 0;
+    padding: 15px;
+    margin-bottom: 8px;
+  }
+
+  &__date {
+    font-size: 12px;
+    opacity: 0.5;
+  }
+
+  &__text {
+    color: #ffffff;
+    line-height: 20px;
+  }
+
+  &__icon--readed{
+    position: absolute;
+    bottom: 22px;
+    left: -25px;
+    color: $blue!important;
+  }
+
+  &__attachments {
+    display: flex;
+    margin-bottom: 5px;
+    &-item {
+      margin-right: 5px;
+      cursor: pointer;
+      img {
+        width: 45px;
+        height: 45px;
+        border-radius: 8px;
+      }
+    }
+  }
+
+  &--is-audio {
+    #{$self}__bubble {
+      width: 280px;
+      position: relative;
+      overflow: hidden;
+    }
+    #{$self}__audio {
+      audio {
+        display: none;
+      }
+      &-info {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      &-btn {
+        button {
+          width: 28px;
+          height: 28px;
+          border: 0;
+          border-radius: 30px;
+          background: #0f3997;
+          cursor: pointer;
+          img {
+            height: 13px;
+          }
+        }
+      }
+      &-duration {
+        color: #fff;
+        font-weight: 500;
+        opacity: 0.5;
+        font-size: 12px;
+      }
+      &-progress {
+        left: 0;
+        top: 0;
+        position: absolute;
+        background: #418fff;
+        height: 100%;
+        //transition: width 0.5s ease;
+      }
+    }
+  }
+
+  &--isme {
+    display: flex;
+    flex-direction: row-reverse;
+    #{$self}__content {
+      margin-bottom: 15px;
+      flex-direction: row-reverse;
+      position: relative;
+    }
+    #{$self}__avatar {
+      img {
+        margin-right: 0;
+        margin-left: 13px;
+      }
+    }
+    #{$self}__info {
+      text-align: right;
+    }
+    #{$self}__bubble {
+      background: #ffffff;
+      border: 1px solid #ececec;
+      box-shadow: 0 4px 4px rgba(0, 0, 0, 0.220444);
+      border-radius: 12px 12px 0 12px;
+    }
+    #{$self}__text {
+      color: $black;
+    }
+  }
+
+  &--is-typing {
+    #{$self}__bubble {
+      padding: 15px 20px;
+      background-color: $message-typing-blue;
+    }
+  }
+
+  &--image {
+    #{$self}__attachments {
+      &-item {
+        img {
+          height: 150px;
+          width: 150px;
+        }
+      }
+    }
+  }
+
+  &__typing {
+    span {
+      height: 8px;
+      width: 8px;
+      border-radius: 50%;
+      background: $message-typing-circle;
+      display: inline-block;
+      margin-left: 8px;
+      animation-name: typingAnimation;
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: infinite;
+      animation-duration: 0.5s;
+      &:first-child{
+        margin: 0;
+      }
+      &:nth-of-type(2){
+        animation-duration: 0.6s;
+      }
+      &:nth-of-type(3){
+        animation-duration: 0.7s;
+      }
+    }
+  }
+}
+
+@keyframes typingAnimation{
+  from {
+    opacity: 0;
+  }
+  50%{
+    opacity: 1;
+  }
+}
