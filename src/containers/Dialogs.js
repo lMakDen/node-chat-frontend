@@ -6,23 +6,27 @@ import { Dialogs as BaseDialogs } from '../components/index';
 const Dialogs = ({ items, userId, fetchDialogs, currentDialogId, setCurrentDialogId }) => {
   const [inputValue, setValue] = useState('');
   const [filtered, setFilteredItems] = useState(Array.from(items));
+
   const onChangeInput = ({ target: { value } }) => {
-    const boom = items.filter(
-      dialog =>
-        dialog.user.fullname.toLowerCase().indexOf(value.toLowerCase()) >= 0
-    )
-    setFilteredItems(boom)
+    setFilteredItems(items.filter(
+      dialog => dialog.author.fullName.toLowerCase().indexOf(value.toLowerCase()) >= 0
+    ))
+
     setValue(value)
   }
 
   useEffect(() => {
     if (items.length) {
       onChangeInput({ target: { value: '' } });
+    } else {
+      setFilteredItems(items)
     }
-  }, [items])
+  }, [items, onChangeInput])
 
   useEffect(() => {
-    fetchDialogs();
+    if (!items.length) {
+      fetchDialogs();
+    }
   }, [])
 
   return (

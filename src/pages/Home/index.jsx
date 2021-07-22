@@ -1,5 +1,4 @@
 import React from 'react'
-import { Route } from 'react-router-dom'
 import { Button } from 'antd'
 import { TeamOutlined, FormOutlined, EllipsisOutlined } from '@ant-design/icons'
 import { Status, ChatInput } from '../../components'

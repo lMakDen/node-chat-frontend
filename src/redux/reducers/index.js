@@ -1,7 +1,6 @@
 import { combineReducers } from "redux";
-// import dialogs from "./dialogs";
 
-const reducers = ["dialogs", "messages"];
+const reducers = ["dialogs", "messages", "user"];
 
 export default combineReducers(
   reducers.reduce((initial, name) => {

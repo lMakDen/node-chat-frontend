@@ -1,10 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Form, Input } from 'antd'
+import { Form } from 'antd'
 import { UserOutlined, LockOutlined, MailOutlined, InfoCircleOutlined, InfoCircleFilled, InfoCircleTwoTone } from '@ant-design/icons'
-import { Button, Block } from '../../../components'
-import { validateField } from '../../../utils/helpers'
-
+import {Button, Block, FormField} from '../../../components'
+import { userActions } from '../../../redux/actions';
+import store from '../../../redux/store'
 
 const RegisterForm = (props) => {
   const {
@@ -14,6 +14,8 @@ const RegisterForm = (props) => {
     handleChange,
     handleBlur,
     handleSubmit,
+    isSubmitting,
+    isValid
   } = props;
     const success = false
     return (
@@ -28,53 +30,58 @@ const RegisterForm = (props) => {
               className="login-form"
               onSubmit={handleSubmit}
             >
-              <Form.Item
-                validateStatus={validateField('email', touched, errors)}
-                hasFeedback
-                help={!touched.email ? undefined : errors.email}
-              >
-                <Input
-                  id="email"
-                  value={values.email}
-                  prefix={<MailOutlined className="site-form-item-icon" />}
-                  placeholder="E-Mail"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
+              <FormField
+                icon={<MailOutlined className="site-form-item-icon" />}
+                name='email'
+                touched={touched}
+                errors={errors}
+                values={values}
+                handleChange={handleChange}
+                handleBlur={handleBlur}
+                placeholder='E-Mail'
+              />
+
+              <FormField
+                icon={<UserOutlined className="site-form-item-icon" />}
+                name='fullName'
+                touched={touched}
+                errors={errors}
+                values={values}
+                handleChange={handleChange}
+                handleBlur={handleBlur}
+                placeholder='Ваше имя и фамилия'
+              />
+
+                <FormField
+                  icon={<LockOutlined className="site-form-item-icon" />}
+                  name='password'
+                  touched={touched}
+                  errors={errors}
+                  values={values}
+                  handleChange={handleChange}
+                  handleBlur={handleBlur}
+                  placeholder='Введите пароль'
+                  type='password'
                 />
-              </Form.Item>
+
+                <FormField
+                  icon={<LockOutlined className="site-form-item-icon" />}
+                  name='password_2'
+                  touched={touched}
+                  errors={errors}
+                  values={values}
+                  handleChange={handleChange}
+                  handleBlur={handleBlur}
+                  placeholder='Повторите пароль'
+                  type='password'
+                />
+
               <Form.Item>
-                <Input
-                  prefix={<UserOutlined className="site-form-item-icon" />}
-                  placeholder="Ваше имя"
-                />
-              </Form.Item>
-              <Form.Item
-                validateStatus={validateField('password', touched, errors)}
-                hasFeedback
-                help={!touched.password ? undefined : errors.password}
-              >
-                <Input
-                  id='password'
-                  value={values.password}
-                  prefix={<LockOutlined className="site-form-item-icon" />}
-                  type="password"
-                  placeholder="Введите пароль"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-              </Form.Item>
-              <Form.Item>
-                <Input
-                  prefix={<LockOutlined className="site-form-item-icon" />}
-                  type="password"
-                  placeholder="Повторите пароль"
-                />
-              </Form.Item>
-              <Form.Item>
-                <Button onClick={handleSubmit} type="primary" htmlType="submit" className="submit">
+                {isSubmitting && !isValid && <span> Ошибка!</span>}
+                <Button disabled={isSubmitting} onClick={handleSubmit} type="primary" htmlType="submit" className="submit">
                   Зарегестрироваться
                 </Button>
-                <Link className="auth__register-link" to="./login">
+                <Link className="auth__register-link" to="/signIn">
                   Войти в аккаунт
                 </Link>
               </Form.Item>

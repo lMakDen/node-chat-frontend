@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Form, Input, Checkbox } from 'antd'
 import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons'
+
 import { Button, Block } from '../../../components'
 import { validateField } from '../../../utils/helpers'
 
@@ -13,7 +14,10 @@ const LoginForm = (props) => {
     handleChange,
     handleBlur,
     handleSubmit,
+    isSubmitting,
+    isValid
   } = props;
+
     return (
         <div>
           <div className="auth__top">
@@ -68,10 +72,11 @@ const LoginForm = (props) => {
                 </div>
               </Form.Item>
               <Form.Item>
-                <Button onClick={handleSubmit} type="primary" htmlType="submit" className="submit">
+                {isSubmitting && !isValid && <span> Ошибка!</span>}
+                <Button disabled={isSubmitting} onClick={handleSubmit} type="primary" htmlType="submit" className="submit">
                   Войти
                 </Button>
-                <Link className="auth__register-link" to="register">
+                <Link className="auth__register-link" to="/signUp">
                   Зарегестрироваться
                 </Link>
               </Form.Item>

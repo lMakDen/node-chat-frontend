@@ -8,6 +8,7 @@ import { DialogItem } from '../'
 import './Dialogs.scss'
 
 const Dialogs = ({ items, userId, onSearch, onSelectDialog, currentDialogId }) => {
+  debugger
   return <div className="dialogs">
     <div className="chat__sidebar-search">
       <Input
@@ -21,7 +22,7 @@ const Dialogs = ({ items, userId, onSearch, onSelectDialog, currentDialogId }) =
     {items.length ? orderBy(items, ['create_at'], ['desc']).map((item) => (
       <DialogItem
         key={item._id}
-        isMe={item.user._id === userId}
+        isMe={item.author._id === userId}
         onSelect={onSelectDialog}
         currentDialogId={currentDialogId}
         {...item}

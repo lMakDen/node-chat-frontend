@@ -6,10 +6,11 @@ import './Avatar.scss'
 
 const Avatar = ({ user }) => {
   if( user.avatar ){
-    return <img src={user.avatar} alt={`${user.fullname} avatar`}/>
+    return <img src={user.avatar} alt={`${user.fullName} avatar`}/>
   } else {
     const { color, colorLighten } = generateAvatarFromHash(user._id);
-    const firstChar = user.fullname[0].toUpperCase();
+    debugger
+    const firstChar = user.fullName[0].toUpperCase();
     return (
       <div
         style={{

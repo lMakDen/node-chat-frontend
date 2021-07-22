@@ -12,12 +12,23 @@ export default ({ isAuth, values, errors }) => {
     password: (value) => {
       if (!value) {
         errors.password = 'Введите пароль!';
-      } else if (
+      }
+      else if (
         !/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/.test(value)
       ) {
-        errors.password = isAuth ? 'Неверный пароль' : 'Слишком легкий пароль!';
+        errors.password = 'Слишком легкий пароль!';
       }
-    }
+    },
+    fullName: (value) => {
+      if (!value) {
+        errors.fullName = 'Укажите свое имя и фамилию';
+      }
+    },
+    password_2: (value) => {
+      if (value !== values.password) {
+        errors.password_2 = 'Пароли не совпадают';
+      }
+    },
   }
 
   Object.keys(values).forEach((key) => (rules[key] && rules[key](values[key])))
