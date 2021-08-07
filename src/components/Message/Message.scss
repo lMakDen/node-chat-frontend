@@ -113,10 +113,8 @@
       position: relative;
     }
     #{$self}__avatar {
-      img {
         margin-right: 0;
         margin-left: 13px;
-      }
     }
     #{$self}__info {
       text-align: right;

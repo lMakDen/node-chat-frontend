@@ -1,14 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Input, Button, Empty } from 'antd'
+import { Empty } from 'antd'
 import classNames from 'classnames'
-import { Message, Status, ChatInput } from '../../components'
+import { Message } from '../../components'
 
 
 
 import './Messages.scss'
 
-const Messages = ({blockRef, items, isLoading }) => {
+const Messages = ({blockRef, items, isLoading, user }) => {
   return items.length ? <div
       className={classNames('messages', {'messages--loading': isLoading})}
       ref={blockRef}
@@ -17,6 +17,7 @@ const Messages = ({blockRef, items, isLoading }) => {
       <Message
         key={index}
         {...item}
+        isMe={user._id === item.user.id}
       />
     ))}
     </div> :

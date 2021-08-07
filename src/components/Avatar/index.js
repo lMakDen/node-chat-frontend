@@ -1,16 +1,20 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { generateAvatarFromHash } from "../../utils/helpers"
+import {generateAvatarFromHash} from "../../utils/helpers"
 
 import './Avatar.scss'
 
-const Avatar = ({ user }) => {
-  if( user.avatar ){
+const Avatar = props => {
+  let {user} = props;
+  if (!user) {
+    return null
+  }
+  if (user && user.avatar) {
     return <img src={user.avatar} alt={`${user.fullName} avatar`}/>
   } else {
-    const { color, colorLighten } = generateAvatarFromHash(user._id);
-    debugger
-    const firstChar = user.fullName[0].toUpperCase();
+    const {color, colorLighten} = generateAvatarFromHash(user && user._id);
+    const firstChar = user && user.fullName[0].toUpperCase();
+
     return (
       <div
         style={{
@@ -22,7 +26,7 @@ const Avatar = ({ user }) => {
       </div>
     );
   }
-}
+};
 
 Avatar.propTypes = {
   className: PropTypes.string

@@ -1,10 +1,10 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import { Form, Input, Checkbox } from 'antd'
-import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons'
+import {Link} from 'react-router-dom'
+import {Checkbox, Form, Input} from 'antd'
+import {LockOutlined, MailOutlined} from '@ant-design/icons'
 
-import { Button, Block } from '../../../components'
-import { validateField } from '../../../utils/helpers'
+import {Block, Button} from '../../../components'
+import {validateField} from '../../../utils/helpers'
 
 const LoginForm = (props) => {
   const {

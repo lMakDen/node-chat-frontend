@@ -8,7 +8,7 @@ import { DialogItem } from '../'
 import './Dialogs.scss'
 
 const Dialogs = ({ items, userId, onSearch, onSelectDialog, currentDialogId }) => {
-  debugger
+
   return <div className="dialogs">
     <div className="chat__sidebar-search">
       <Input

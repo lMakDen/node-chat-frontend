@@ -1,8 +1,7 @@
 import React from 'react'
 import { Button } from 'antd'
 import { TeamOutlined, FormOutlined, EllipsisOutlined } from '@ant-design/icons'
-import { Status, ChatInput } from '../../components'
-import { Dialogs, Messages } from '../../containers'
+import { Dialogs, Messages, ChatInputContainer, StatusContainer } from '../../containers'
 import './Home.scss'
 
 const Home = () => {
@@ -18,28 +17,21 @@ const Home = () => {
             <Button shape="circle" icon={<FormOutlined />} />
           </div>
           <div className="chat__sidebar-dialogs">
-            <Dialogs
-              items={[]}
-            />
+            <Dialogs/>
           </div>
         </div>
 
         <div className="chat__dialog">
           <div className="chat__dialog-header">
             <div/>
-            <div className="chat__dialog-header-center">
-              <b className="chat__dialog-header-username">Гай Юлий Цезарь</b>
-              <div className="chat__dialog-header-status">
-                <Status online={true} />
-              </div>
-            </div>
+            <StatusContainer />
             <EllipsisOutlined style={{ fontSize: 22}}/>
           </div>
           <div className="chat__dialog-messages">
             <Messages/>
           </div>
           <div className="chat__dialog-input">
-            <ChatInput items={[]}/>
+            <ChatInputContainer />
           </div>
         </div>
       </div>

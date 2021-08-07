@@ -22,8 +22,16 @@ const FileButton = () => {
   </UploadField>
 }
 
-const ChatInput = props => {
+const ChatInput = ({ onSendMessage, currentDialogId }) => {
+  const [ value, setValue ] = useState('')
   const [ isOpenEmoji, setIsOpenEmoji ] = useState(false)
+
+  const handleSendMessage = (e) => {
+    if(e.keyCode === 13) {
+      onSendMessage({ text: value, dialogId: currentDialogId })
+      setValue('')
+    }
+  }
 
   const onClickEmoji = () => setIsOpenEmoji(!isOpenEmoji)
 
@@ -31,6 +39,9 @@ const ChatInput = props => {
     <Input
       placeholder="Enter your username"
       size="large"
+      onChange={e => setValue(e.target.value)}
+      onKeyUp={handleSendMessage}
+      value={value}
       prefix={
         <div>
           {isOpenEmoji && <div className="chat-input__emoji-picker">

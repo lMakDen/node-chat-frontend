@@ -1,10 +1,8 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import { Form } from 'antd'
-import { UserOutlined, LockOutlined, MailOutlined, InfoCircleOutlined, InfoCircleFilled, InfoCircleTwoTone } from '@ant-design/icons'
-import {Button, Block, FormField} from '../../../components'
-import { userActions } from '../../../redux/actions';
-import store from '../../../redux/store'
+import {Link} from 'react-router-dom'
+import {Form} from 'antd'
+import {InfoCircleTwoTone, LockOutlined, MailOutlined, UserOutlined} from '@ant-design/icons'
+import {Block, Button, FormField} from '../../../components'
 
 const RegisterForm = (props) => {
   const {

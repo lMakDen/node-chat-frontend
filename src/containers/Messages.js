@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { connect } from 'react-redux';
-import { Empty } from 'antd';
+import React, {useEffect, useRef} from 'react';
+import {connect} from 'react-redux';
 import find from 'lodash/find';
 
-import { messagesActions } from '../redux/actions';
+import socket from '../core/socket';
+import {messagesActions} from '../redux/actions';
 
-import { Messages as BaseMessages } from '../components';
+import {Messages as BaseMessages} from '../components';
 
 const Dialogs = ({
      currentDialog,
@@ -29,9 +29,10 @@ const Dialogs = ({
 
   const messagesRef = useRef(null);
 
-  // const onNewMessage = data => {
-  //   addMessage(data);
-  // };
+  const onNewMessage = data => {
+    addMessage(data);
+    // fetchMessages(data.dialog._id)
+  };
 
   // const toggleIsTyping = () => {
   //   setIsTyping(true);
@@ -53,11 +54,17 @@ const Dialogs = ({
     if (currentDialog) {
       fetchMessages(currentDialog._id);
     }
+
+    socket.on('SERVER:NEW_MESSAGE', onNewMessage)
+    return () => {
+      socket.removeListener('SERVER:NEW_MESSAGE', onNewMessage)
+    }
   }, [currentDialog]);
 
   useEffect(() => {
     if(messagesRef.current) messagesRef.current.scrollTo(0, 999999);
   }, [items, isTyping]);
+
   return (
     <BaseMessages
       user={user}
@@ -82,7 +89,7 @@ export default connect(
     items: messages.items,
     isLoading: messages.isLoading,
     // attachments: attachments.items,
-    // user: user.data,
+    user: user.data,
   }),
   messagesActions,
 )(Dialogs)
