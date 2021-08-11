@@ -8,8 +8,6 @@ import { FormOutlined, TeamOutlined } from "@ant-design/icons";
 import { Dialogs } from "../../containers";
 import { userApi, dialogsApi } from "../../utils/api";
 
-import './styles.scss'
-
 const { Option } = Select;
 const { TextArea } = Input;
 
