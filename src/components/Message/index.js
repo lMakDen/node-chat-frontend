@@ -1,11 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
+
+import { EllipsisOutlined } from '@ant-design/icons'
+import { Popover, Button } from 'antd';
 import classNames from 'classnames'
 import { Time, IconReaded, Avatar } from '../../components'
 import { convertCurrentTime } from '../../utils/helpers'
 import waveSvg from '../../assets/img/wave.svg'
 import playSvg from '../../assets/img/play.svg'
 import pauseSvg from '../../assets/img/pause.svg'
+import {messagesActions} from '../../redux/actions';
 
 import './Message.scss'
 
@@ -77,7 +82,13 @@ const MessageAudio = ({ audioSrc }) => {
   );
 }
 
-const Message = ({ avatar, text, user, audio, date, isMe, isReaded, attachments, isTyping }) => {
+const Message = (props) => {
+  const { avatar, text, user, audio, date, isMe, isReaded, attachments, isTyping, _id: id } = props
+  const dispatch = useDispatch()
+  const onRemoveMessage = () => {
+    dispatch(messagesActions.removeMessageById(id))
+  }
+
   return <div className={classNames('message', {
     'message--isme': isMe,
     'message--is-typing': isTyping,
@@ -85,7 +96,6 @@ const Message = ({ avatar, text, user, audio, date, isMe, isReaded, attachments,
     'message--image': attachments.length === 1,
   })}>
     <div className="message__content">
-      <IconReaded isMe={isMe} isReaded={isReaded} />
       <div className="message__avatar">
         <Avatar user={user} />
       </div>
@@ -117,6 +127,24 @@ const Message = ({ avatar, text, user, audio, date, isMe, isReaded, attachments,
           <Time date={date}/>
         </span>}
       </div>
+      {isMe && <div className='message__icon-container'>
+        <Popover
+          title="Title"
+          trigger="click"
+          content={
+            <div>
+              <Button onClick={onRemoveMessage}>
+                Удалить сообщение
+              </Button>
+            </div>
+          }
+        >
+          <div className="message__icon-actions">
+            <EllipsisOutlined style={{ fontSize: 22}} />
+          </div>
+        </Popover>
+        <div><IconReaded isReaded={isReaded} /></div>
+      </div>}
     </div>
   </div>
 }

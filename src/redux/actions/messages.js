@@ -48,7 +48,7 @@ const Actions = {
       .catch(() => {
         dispatch(Actions.setIsLoading(false));
       });
-  }
+  },
 };
 
 export default Actions;

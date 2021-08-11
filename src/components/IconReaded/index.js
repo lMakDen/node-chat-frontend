@@ -5,16 +5,15 @@ import noreaded from '../../assets/img/noreaded.svg'
 
 import './IconReaded.scss'
 
-const IconReaded = ({ isMe, isReaded }) => {
-  return isMe ? <img
+const IconReaded = ({ isReaded }) => {
+  return <img
     src={isReaded ? readed : noreaded}
     alt="readed"
     className="message__icon--readed"
-  /> : null
+  />
 }
 
 IconReaded.propTypes = {
-  isMe: PropTypes.bool,
   isReaded: PropTypes.bool
 }
 

@@ -6,6 +6,11 @@
     max-width: 440px;
     margin-bottom: 20px;
     position: relative;
+    &:hover {
+      #{$self}__icon-actions {
+        opacity: 1;
+      }
+    }
   }
   &__avatar {
     display: flex;
@@ -38,9 +43,6 @@
   }
 
   &__icon--readed{
-    position: absolute;
-    bottom: 22px;
-    left: -25px;
     color: $blue!important;
   }
 
@@ -55,6 +57,29 @@
         height: 45px;
         border-radius: 8px;
       }
+    }
+  }
+
+  &__icon {
+    &-readed {
+      position: absolute;
+      bottom: 22px;
+      left: -25px;
+    }
+    &--no {
+      left: -20px;
+    }
+    &-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      padding-right: 5px;
+      padding-bottom: 10px;
+    }
+    &-actions {
+      transform: rotate(90deg);
+      opacity: 0;
     }
   }
 

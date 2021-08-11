@@ -7,10 +7,21 @@ const Actions = {
     payload: data
   }),
 
+  setIsAuth: bool => ({
+    type: "USER:SET_IS_AUTH",
+    payload: bool
+  }),
+
   fetchUserData: () => (dispatch) => {
     userApi.getMe().then(({ data }) => {
       dispatch(Actions.setUserData(data))
     })
+      .catch(err => {
+        if(err.response.status === 403) {
+          dispatch(Actions.setIsAuth(false))
+          delete window.localStorage.token
+        }
+      })
   },
 
   fetchUserLogin: (postData) => (dispatch) => {
@@ -23,6 +34,7 @@ const Actions = {
       window.axios.defaults.headers.common["token"] = data.token;
       window.localStorage['token'] = data.token
       dispatch(Actions.fetchUserData())
+      dispatch(Actions.setIsAuth(true))
       return data
     }).catch(() => {
       openNotification({
