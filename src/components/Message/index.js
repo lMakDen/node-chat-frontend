@@ -1,6 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
+import reactStringReplace from 'react-string-replace'
+import { Emoji } from 'emoji-mart'
+
 
 import { EllipsisOutlined } from '@ant-design/icons'
 import { Popover, Button } from 'antd';
@@ -100,9 +103,15 @@ const Message = (props) => {
         <Avatar user={user} />
       </div>
       <div className="message__info">
-        {(audio || text || isTyping) && <div className="message__bubble">
-          {text && <p className="message__text">{text}</p>}
-          {isTyping && <div className="message__typing">
+        {(audio || text || isTyping) &&
+        <div className="message__bubble">
+          {text && <p className="message__text">
+            {reactStringReplace(text, /:(.+?):/g, (match, i) => {
+              return <Emoji emoji={match} set='apple' size={20} />
+            })}
+          </p>}
+          {isTyping &&
+          <div className="message__typing">
             <span/>
             <span/>
             <span/>

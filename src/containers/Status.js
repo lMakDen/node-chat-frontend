@@ -7,9 +7,12 @@ const StatusContainer = ({ currentDialogId, user, dialogs }) => {
     return null
   }
   const foundDialog = dialogs.find((dialog) => dialog._id === currentDialogId)
+  if(!foundDialog) {
+    return null
+  }
+
   const partner = foundDialog.author._id === user._id
     ?  foundDialog.partner : foundDialog.author
-  debugger
   return <Status
     isOnline={partner.isOnline}
     fullName={partner.fullName}
@@ -17,9 +20,11 @@ const StatusContainer = ({ currentDialogId, user, dialogs }) => {
 }
 
 export default connect(
-  ({ dialogs, user }) => ({
-    dialogs: dialogs.items,
-    currentDialogId: dialogs.currentDialogId,
-    user: user.data
-  }),
+  (state) => {
+    return {
+      dialogs: state.dialogs.items,
+      currentDialogId: state.dialogs.currentDialogId,
+      user: state.user.data
+    }
+  },
 )(StatusContainer)
