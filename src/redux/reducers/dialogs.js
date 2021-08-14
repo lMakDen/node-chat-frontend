@@ -11,12 +11,12 @@ export default (state = initialState, { type, payload }) => {
         ...state,
         items: payload,
       };
-    case 'DIALOGS:LAST_MESSAGE_READED_STATUS':
+    case 'DIALOGS:LAST_MESSAGE_READ_STATUS':
       return {
         ...state,
         items: state.items.map(dialog => {
           if (dialog._id === payload.dialogId) {
-            dialog.lastMessage.readed = true;
+            dialog.lastMessage.isRead = true;
           }
           return dialog;
         }),

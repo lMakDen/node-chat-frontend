@@ -1,6 +1,7 @@
 import React, {useEffect, useRef} from 'react';
 import {connect} from 'react-redux';
 import find from 'lodash/find';
+import { Empty } from 'antd'
 
 import socket from '../core/socket';
 import {messagesActions} from '../redux/actions';
@@ -16,11 +17,9 @@ const Dialogs = ({
      isLoading,
      removeMessageById,
      attachments,
-     isTyping
+     isTyping,
+     currentDialogId
    }) => {
-  // if (!currentDialog) {
-  //   return <Empty description="Откройте диалог" />;
-  // }
 
   // const [previewImage, setPreviewImage] = useState(null);
   // const [blockHeight, setBlockHeight] = useState(135);
@@ -64,32 +63,40 @@ const Dialogs = ({
   useEffect(() => {
     if(messagesRef.current) messagesRef.current.scrollTo(0, 999999);
   }, [items, isTyping]);
-
+  if (!currentDialog) {
+    return <Empty description="Откройте диалог" />;
+  }
   return (
-    <BaseMessages
-      user={user}
-      blockRef={messagesRef}
-      items={items}
-      // isLoading={isLoading && !user}
-      // onRemoveMessage={removeMessageById}
-      // setPreviewImage={setPreviewImage}
-      // previewImage={previewImage}
-      // blockHeight={blockHeight}
-      // isTyping={isTyping}
-      // partner={
-      //   user._id !== currentDialog.partner._id ? currentDialog.author : currentDialog.partner
-      // }
-    />
+    !currentDialog ?
+      <Empty description="Откройте диалог" />
+      : <BaseMessages
+          user={user}
+          blockRef={messagesRef}
+          items={items}
+          // isLoading={isLoading && !user}
+          // onRemoveMessage={removeMessageById}
+          // setPreviewImage={setPreviewImage}
+          // previewImage={previewImage}
+          // blockHeight={blockHeight}
+          // isTyping={isTyping}
+          // partner={
+          //   user._id !== currentDialog.partner._id ? currentDialog.author : currentDialog.partner
+          // }
+        />
   );
 };
 
 export default connect(
-  ({ dialogs, messages, user, attachments }) => ({
-    currentDialog: find(dialogs.items, { _id: dialogs.currentDialogId }),
-    items: messages.items,
-    isLoading: messages.isLoading,
-    // attachments: attachments.items,
-    user: user.data,
-  }),
+  ({ dialogs, messages, user, attachments }) => {
+    debugger
+    return {
+      currentDialog: find(dialogs.items, { _id: dialogs.currentDialogId }),
+      items: messages.items,
+      isLoading: messages.isLoading,
+      // attachments: attachments.items,
+      currentDialogId: dialogs.currentDialogId,
+      user: user.data,
+    }
+  },
   messagesActions,
 )(Dialogs)

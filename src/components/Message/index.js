@@ -8,7 +8,7 @@ import { Emoji } from 'emoji-mart'
 import { EllipsisOutlined } from '@ant-design/icons'
 import { Popover, Button } from 'antd';
 import classNames from 'classnames'
-import { Time, IconReaded, Avatar } from '../../components'
+import { Time, IconRead, Avatar } from '../../components'
 import { convertCurrentTime } from '../../utils/helpers'
 import waveSvg from '../../assets/img/wave.svg'
 import playSvg from '../../assets/img/play.svg'
@@ -86,7 +86,7 @@ const MessageAudio = ({ audioSrc }) => {
 }
 
 const Message = (props) => {
-  const { avatar, text, user, audio, date, isMe, isReaded, attachments, isTyping, _id: id } = props
+  const { avatar, text, user, audio, date, isMe, isRead, attachments, isTyping, _id: id } = props
   const dispatch = useDispatch()
   const onRemoveMessage = () => {
     dispatch(messagesActions.removeMessageById(id))
@@ -107,7 +107,7 @@ const Message = (props) => {
         <div className="message__bubble">
           {text && <p className="message__text">
             {reactStringReplace(text, /:(.+?):/g, (match, i) => {
-              return <Emoji emoji={match} set='apple' size={20} />
+              return <Emoji key={i} emoji={match} set='apple' size={20} />
             })}
           </p>}
           {isTyping &&
@@ -152,7 +152,7 @@ const Message = (props) => {
             <EllipsisOutlined style={{ fontSize: 22}} />
           </div>
         </Popover>
-        <div><IconReaded isReaded={isReaded} /></div>
+        <div><IconRead isRead={isRead} /></div>
       </div>}
     </div>
   </div>
@@ -171,7 +171,7 @@ Message.propTypes = {
   attachments: PropTypes.array,
   isTyping: PropTypes.bool,
   isMe: PropTypes.bool,
-  isReaded: PropTypes.bool
+  isRead: PropTypes.bool
 }
 
 export default Message

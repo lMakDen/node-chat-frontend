@@ -6,8 +6,8 @@ const Actions = {
     type: 'DIALOGS:SET_ITEMS',
     payload: items,
   }),
-  updateReadedStatus: ({ userId, dialogId }) => ({
-    type: 'DIALOGS:LAST_MESSAGE_READED_STATUS',
+  updateReadStatus: ({ userId, dialogId }) => ({
+    type: 'DIALOGS:LAST_MESSAGE_READ_STATUS',
     payload: {
       userId,
       dialogId,

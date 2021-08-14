@@ -4,7 +4,7 @@ import classNames from 'classnames'
 // import format from 'date-fns/format'
 // import isToday from 'date-fns/isToday'
 import { Link } from 'react-router-dom'
-import { IconReaded, Avatar } from '../'
+import { IconRead, Avatar } from '../'
 
 
 // const getMessageTime = createdAt => {
@@ -14,14 +14,13 @@ import { IconReaded, Avatar } from '../'
 //   return format(createdAt, 'dd.MM.yyyy')
 // }
 
-const DialogItem = ({_id, user, created_at, text, unreaded, isMe, isReaded, currentDialogId, onSelect, lastMessage }) => {
+const DialogItem = ({_id, user, created_at, text, read, isMe, currentDialogId, lastMessage }) => {
 
   return <Link to={`/dialog/${_id}`}>
     <div className={classNames('dialogs__item', {
       'dialogs__item--online': lastMessage && lastMessage.user.isOnline,
       'dialogs__item--selected': currentDialogId === _id
     })}
-      onClick={onSelect.bind(this, _id)}
     >
       <div className="dialogs__item-avatar">
         <Avatar user={lastMessage && lastMessage.user} />
@@ -37,10 +36,10 @@ const DialogItem = ({_id, user, created_at, text, unreaded, isMe, isReaded, curr
           <p>
             {lastMessage && lastMessage.text}
           </p>
-          {lastMessage && lastMessage.unreaded && <div className="dialogs__item-info-bottom-count">
-            {lastMessage.unreaded > 9 ? '+9' : lastMessage.unreaded}
+          {lastMessage && lastMessage.read && <div className="dialogs__item-info-bottom-count">
+            {lastMessage.read > 9 ? '+9' : lastMessage.read}
           </div>}
-          {isMe && <IconReaded isMe={true} isReaded={true} />}
+          {isMe && <IconRead isMe={isMe} isRead={lastMessage.isRead} />}
         </div>
       </div>
     </div>

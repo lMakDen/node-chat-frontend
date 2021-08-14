@@ -15,5 +15,10 @@ const App = ({ isAuth }) => {
 }
 
 export default connect(
-  ({ user: { isAuth } }) => ({ isAuth })
+  (state) => {
+    console.log('state', state)
+    return {
+      isAuth: state.user.isAuth
+    }
+  }
 )(App);
