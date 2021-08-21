@@ -1,16 +1,20 @@
-import React, { useState , useRef} from 'react'
+import React, { useState , useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Input, Button } from 'antd'
+import { connect } from "react-redux";
 import { UploadField } from '@navjobs/upload'
-import { SmileOutlined, CameraOutlined, AudioOutlined, SendOutlined } from '@ant-design/icons'
+import { SmileOutlined, CameraOutlined, AudioOutlined, SendOutlined, CheckCircleOutlined, DeleteOutlined } from '@ant-design/icons'
 import { Picker } from 'emoji-mart'
+import { messagesActions } from "../../redux/actions";
 import useOnClickOutside from '../../utils/hooks';
+import { filesApi } from '../../utils/api';
+import UploadFile from '../UploadFile';
 
 import './ChatInput.scss'
 
-const FileButton = () => {
+const FileButton = ({ onSelectFiles }) => {
   return <UploadField
-    onFiles={files => console.log(files)}
+    onFiles={onSelectFiles}
     containerProps={{
       className: 'chat-input__actions-upload-btn'
     }}
@@ -23,14 +27,26 @@ const FileButton = () => {
   </UploadField>
 }
 
-const ChatInput = ({ onSendMessage, currentDialogId }) => {
+const ChatInput = ({ fetchSendMessage, currentDialogId }) => {
   const [ value, setValue ] = useState('')
+  const [ isRecording, setIsRecording ] = useState(false)
+  const [ mediaRecorder, setMediaRecorder ] = useState(null)
   const [ isOpenEmoji, setIsOpenEmoji ] = useState(false)
+  const [ attachments, setAttachments ] = useState([])
+
+  // TODO возможно не стоит ложить в window
+  window.navigator.getUserMedia =
+    window.navigator.getUserMedia ||
+    window.navigator.mozGetUserMedia ||
+    window.navigator.msGetUserMedia ||
+    window.navigator.webkitGetUserMedia
 
   const handleSendMessage = (e) => {
     if(e.keyCode === 13) {
-      onSendMessage({ text: value, dialogId: currentDialogId })
+      const attachmentsId = attachments.map((file) => file.uid)
+      fetchSendMessage({ text: value, dialogId: currentDialogId, attachments: attachmentsId })
       setValue('')
+      setAttachments([])
     }
   }
 
@@ -44,6 +60,70 @@ const ChatInput = ({ onSendMessage, currentDialogId }) => {
     setIsOpenEmoji(false)
   })
 
+  const onSelectFiles = async files => {
+    let uploaded = [];
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const uid = Math.round(Math.random() * 1000);
+      uploaded = [
+        ...uploaded,
+        {
+          uid,
+          name: file.name,
+          status: 'uploading',
+        },
+      ];
+      setAttachments(uploaded);
+      // eslint-disable-next-line no-loop-func
+      await filesApi.upload(file).then(({ data }) => {
+        uploaded = uploaded.map(item => {
+          if (item.uid === uid) {
+            return {
+              status: 'done',
+              uid: data.message._id,
+              name: data.message.filename,
+              url: data.message.url,
+            };
+          }
+          return item;
+        });
+      });
+    }
+    setAttachments(uploaded);
+  }
+
+  const handleStopRecording = () => {
+    mediaRecorder.stop()
+  }
+
+  const onRecord = () => {
+    if (navigator.getUserMedia) {
+      navigator.getUserMedia({ audio: true }, onRecording, onError)
+    }
+  }
+
+  const onRecording = (stream) => {
+    const recorder = new MediaRecorder(stream)
+    setMediaRecorder(recorder)
+    recorder.start()
+    recorder.onstart = () => {
+      setIsRecording(true)
+    }
+
+    recorder.onstop = () => {
+      setIsRecording(false)
+    }
+
+    recorder.ondataavailable = (e) => {
+      const audioUrl = window.URL.createObjectURL(e.data)
+      new Audio(audioUrl).play()
+    }
+  }
+
+  const onError = (err) => {
+    console.log(err)
+  }
+
   return <div className="chat-input">
     <Input
       placeholder="Enter your username"
@@ -51,8 +131,9 @@ const ChatInput = ({ onSendMessage, currentDialogId }) => {
       onChange={e => setValue(e.target.value)}
       onKeyUp={handleSendMessage}
       value={value}
+      disabled={isRecording}
       prefix={
-        <div>
+        !isRecording && <div>
           <div ref={emojiRef} className="chat-input__emoji-picker">
             {isOpenEmoji &&
               <Picker onSelect={setEmoji} set='apple' />
@@ -63,12 +144,27 @@ const ChatInput = ({ onSendMessage, currentDialogId }) => {
       }
       suffix={
         <div className="chat-input__actions">
-          <Button shape="circle" icon={<FileButton />} />
-          <Button shape="circle" icon={<AudioOutlined />} />
-          <Button shape="circle" icon={<SendOutlined />} />
+          {isRecording ?
+            <><div className="chat-input__record-status">
+              <i/>
+              <div className='chat-input__record-label'>Recording...</div>
+              <Button onClick={handleStopRecording} shape="circle" icon={<CheckCircleOutlined />} />
+              <Button onClick={handleStopRecording} shape="circle" icon={<DeleteOutlined />} />
+            </div>
+            </> :
+            <>
+              <Button shape="circle" icon={<FileButton onSelectFiles={onSelectFiles} />} />
+              <Button onClick={onRecord} shape="circle" icon={<AudioOutlined />} />
+              <Button shape="circle" icon={<SendOutlined />} />
+            </>
+          }
         </div>
       }
     />
+    <UploadFile
+      attachments={attachments}
+    />
+
   </div>
 }
 
@@ -76,4 +172,8 @@ ChatInput.propTypes = {
   className: PropTypes.string
 }
 
-export default ChatInput
+
+export default connect(
+  ({ dialogs }) => dialogs,
+  messagesActions,
+)(ChatInput)

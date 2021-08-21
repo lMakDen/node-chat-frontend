@@ -3,8 +3,8 @@ import { EllipsisOutlined } from '@ant-design/icons'
 import { withRouter } from 'react-router'
 import { dialogsActions } from '../../redux/actions/index';
 
-import { Messages, ChatInputContainer, StatusContainer } from '../../containers'
-import { Sidebar } from '../../components'
+import { Messages, StatusContainer } from '../../containers'
+import { Sidebar, ChatInput } from '../../components'
 import './Home.scss'
 import {connect} from "react-redux";
 
@@ -26,11 +26,9 @@ const Home = (props) => {
             <StatusContainer />
             <EllipsisOutlined style={{ fontSize: 22}}/>
           </div>
-          <div className="chat__dialog-messages">
-            <Messages/>
-          </div>
+          <Messages/>
           {dialogId && <div className="chat__dialog-input">
-            <ChatInputContainer />
+            <ChatInput />
           </div>}
         </div>
       </div>

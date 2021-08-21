@@ -96,7 +96,7 @@ const Message = (props) => {
     'message--isme': isMe,
     'message--is-typing': isTyping,
     'message--is-audio': audio,
-    'message--image': attachments.length === 1,
+    'message--image': !text && attachments.length === 1,
   })}>
     <div className="message__content">
       <div className="message__avatar">
@@ -121,20 +121,20 @@ const Message = (props) => {
           }
         </div>}
 
-        <div className="message__attachments">
-          {attachments.map((attachment, index) => {
-            return (
-              <div key={index} className="message__attachments-item">
-                <img src={attachment.url} alt={attachment.filename}/>
-              </div>
-            )
-          })}
-        </div>
         {date && <span
           className="message__date"
         >
           <Time date={date}/>
         </span>}
+      </div>
+      <div className="message__attachments">
+        {attachments.map((attachment, index) => {
+          return (
+            <div key={index} className="message__attachments-item">
+              <img src={attachment.url} alt={attachment.filename}/>
+            </div>
+          )
+        })}
       </div>
       {isMe && <div className='message__icon-container'>
         <Popover

@@ -77,7 +77,7 @@ const Dialogs = ({
           // onRemoveMessage={removeMessageById}
           // setPreviewImage={setPreviewImage}
           // previewImage={previewImage}
-          // blockHeight={blockHeight}
+          hasAttachments={attachments && attachments.length}
           // isTyping={isTyping}
           // partner={
           //   user._id !== currentDialog.partner._id ? currentDialog.author : currentDialog.partner

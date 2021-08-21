@@ -50,11 +50,11 @@
     display: flex;
     margin-bottom: 5px;
     &-item {
-      margin-right: 5px;
+      margin: 0 5px;
       cursor: pointer;
       img {
-        width: 45px;
-        height: 45px;
+        width: 52px;
+        height: 52px;
         border-radius: 8px;
       }
     }
