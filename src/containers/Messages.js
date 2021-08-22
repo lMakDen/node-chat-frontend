@@ -88,7 +88,7 @@ const Dialogs = ({
 
 export default connect(
   ({ dialogs, messages, user, attachments }) => {
-    debugger
+
     return {
       currentDialog: find(dialogs.items, { _id: dialogs.currentDialogId }),
       items: messages.items,

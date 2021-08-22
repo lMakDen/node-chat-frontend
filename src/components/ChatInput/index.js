@@ -34,19 +34,34 @@ const ChatInput = ({ fetchSendMessage, currentDialogId }) => {
   const [ isOpenEmoji, setIsOpenEmoji ] = useState(false)
   const [ attachments, setAttachments ] = useState([])
 
-  // TODO возможно не стоит ложить в window
+  //TODO возможно не стоит ложить в window
   window.navigator.getUserMedia =
     window.navigator.getUserMedia ||
     window.navigator.mozGetUserMedia ||
     window.navigator.msGetUserMedia ||
     window.navigator.webkitGetUserMedia
 
+  const sendAudio = (audioId) => {
+    fetchSendMessage({
+      text: value,
+      dialogId: currentDialogId,
+      attachments: [audioId],
+    })
+  }
+
+  const sendMessage = () => {
+    fetchSendMessage({
+      text: value,
+      dialogId: currentDialogId,
+      attachments: attachments.map((file) => file.uid),
+    })
+    setValue('')
+    setAttachments([])
+  }
+
   const handleSendMessage = (e) => {
     if(e.keyCode === 13) {
-      const attachmentsId = attachments.map((file) => file.uid)
-      fetchSendMessage({ text: value, dialogId: currentDialogId, attachments: attachmentsId })
-      setValue('')
-      setAttachments([])
+      sendMessage()
     }
   }
 
@@ -115,8 +130,10 @@ const ChatInput = ({ fetchSendMessage, currentDialogId }) => {
     }
 
     recorder.ondataavailable = (e) => {
-      const audioUrl = window.URL.createObjectURL(e.data)
-      new Audio(audioUrl).play()
+      const file = new File([e.data], 'audio/ogg')
+      filesApi.upload(file).then(({ data }) => {
+        sendAudio(data.message._id)
+      })
     }
   }
 

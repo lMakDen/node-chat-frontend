@@ -85,6 +85,18 @@ const MessageAudio = ({ audioSrc }) => {
   );
 }
 
+const renderAttachment = (attachment) => {
+  if(attachment.ext !== 'webm') {
+    return (
+      <div key={attachment._id} className="message__attachments-item">
+        <img src={attachment.url} alt={attachment.filename}/>
+      </div>
+    )
+  }
+
+  return <MessageAudio audioSrc={attachment.url}/>
+}
+
 const Message = (props) => {
   const { avatar, text, user, audio, date, isMe, isRead, attachments, isTyping, _id: id } = props
   const dispatch = useDispatch()
@@ -92,11 +104,13 @@ const Message = (props) => {
     dispatch(messagesActions.removeMessageById(id))
   }
 
+  const isAudio = attachments[0] && attachments[0].ext === 'webm'
+
   return <div className={classNames('message', {
     'message--isme': isMe,
     'message--is-typing': isTyping,
-    'message--is-audio': audio,
-    'message--image': !text && attachments.length === 1,
+    'message--is-audio': isAudio,
+    'message--image': !isAudio && !text && attachments.length === 1,
   })}>
     <div className="message__content">
       <div className="message__avatar">
@@ -128,13 +142,7 @@ const Message = (props) => {
         </span>}
       </div>
       <div className="message__attachments">
-        {attachments.map((attachment, index) => {
-          return (
-            <div key={index} className="message__attachments-item">
-              <img src={attachment.url} alt={attachment.filename}/>
-            </div>
-          )
-        })}
+        {attachments.map((attachment, index) => renderAttachment(attachment))}
       </div>
       {isMe && <div className='message__icon-container'>
         <Popover
